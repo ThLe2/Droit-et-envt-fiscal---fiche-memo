@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche mémo — Droit et environnement fiscal du particulier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --tmk-prune: #8C1E70;
+  --tmk-prune-dark: #5E1349;
+  --tmk-charbon: #283C28;
+  --tmk-or: #C9A961;
+  --bg: #FAF7F5;
+  --bg-soft: #F4EEF1;
+  --bg-card: #FFFFFF;
+  --border: #E8DCE3;
+  --text: #2A2024;
+  --text-muted: #6B5B62;
+  --shadow-lg: 0 24px 60px rgba(140, 30, 112, 0.12);
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Inter', -apple-system, sans-serif;
+  background-image:
+    radial-gradient(ellipse at 10% 0%, rgba(140, 30, 112, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 100%, rgba(40, 60, 40, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, #FAF7F5 0%, #F4EEF1 100%);
+  color: var(--text);line-height: 1.55;min-height: 100vh;padding: 24px 16px;
+}
+ 
+.fiche{
+  max-width: 980px;margin: 0 auto;
+  background: var(--bg-card);border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);overflow: hidden;
+}
+ 
+.fiche-header{
+  background: linear-gradient(135deg, var(--tmk-prune) 0%, var(--tmk-prune-dark) 100%);
+  padding: 36px 44px 30px;color: white;
+  position: relative;overflow: hidden;
+}
+.fiche-header::before{
+  content:'';position:absolute;
+  top:-30%;right:-5%;width:380px;height:380px;
+  background: radial-gradient(circle, rgba(201,169,97,0.18) 0%, transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.fiche-header-content{position:relative;z-index:1}
+.fiche-eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--tmk-or);font-weight:600;margin-bottom:10px}
+.fiche-title{font-family:'Fraunces',serif;font-size: 34px;font-weight:600;letter-spacing:-0.025em;line-height: 1.1;margin-bottom:8px}
+.fiche-subtitle{font-size:15px;opacity:0.92;font-weight:400}
+.fiche-meta{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.18);display:flex;gap:24px;flex-wrap:wrap;font-size:12px}
+.fiche-meta span{opacity:0.85}
+.fiche-meta strong{color:var(--tmk-or);font-weight:600}
+ 
+.fiche-body{padding: 32px 44px 40px}
+ 
+/* SECTION */
+.section{margin-bottom: 32px}
+.section:last-child{margin-bottom:0}
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
+.section-num{
+  width:28px;height:28px;
+  background:var(--tmk-prune);
+  color:white;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;
+  font-weight:600;font-size:13px;
+  flex-shrink:0;
+}
+.section-title{
+  font-family:'Fraunces',serif;
+  font-size:21px;
+  font-weight:600;
+  color:var(--tmk-charbon);
+  letter-spacing:-0.01em;
+}
+ 
+/* GRID 2 COL */
+.grid-2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+}
+@media(max-width: 720px){.grid-2{grid-template-columns:1fr}}
+ 
+/* INFO CARDS */
+.info-card{
+  background:var(--bg-soft);
+  border-radius:var(--radius);
+  padding: 18px 22px;
+}
+.info-card.dark{
+  background: var(--tmk-charbon);
+  color:white;
+}
+.info-card-title{
+  font-size:11px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--tmk-prune);
+  font-weight:700;
+  margin-bottom:10px;
+}
+.info-card.dark .info-card-title{color:var(--tmk-or)}
+.info-card ul{
+  list-style:none;
+  font-size:13.5px;
+  line-height:1.85;
+  color:var(--tmk-charbon);
+}
+.info-card.dark ul{color:rgba(255,255,255,0.92)}
+.info-card ul li{
+  position:relative;
+  padding-left:14px;
+}
+.info-card ul li::before{
+  content:'';
+  width:5px;height:5px;
+  background:var(--tmk-prune);
+  border-radius:50%;
+  position:absolute;
+  left:0;top:9px;
+}
+.info-card.dark ul li::before{background:var(--tmk-or)}
+.info-card ul li strong{color:var(--tmk-prune-dark);font-weight:600}
+.info-card.dark ul li strong{color:white}
+ 
+/* TABLES */
+.table-wrap{
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:white;
+}
+.t-row{
+  display:grid;
+  grid-template-columns: 1fr 100px;
+  border-top:1px solid var(--border);
+  align-items:center;
+}
+.t-row:first-child{border-top:none}
+.t-row.head{
+  background: linear-gradient(135deg, var(--tmk-prune) 0%, var(--tmk-prune-dark) 100%);
+  color:white;
+}
+.t-row.head > div{
+  padding:12px 18px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.t-row > div{
+  padding:14px 18px;
+  font-size:13px;
+  font-variant-numeric:tabular-nums;
+}
+.t-row .lbl{color:var(--text)}
+.t-row .val{
+  text-align:right;
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  color:var(--tmk-prune-dark);
+  font-size:14px;
+}
+.t-row:nth-child(even):not(.head){background:#FBF7F9}
+ 
+.t-row.bareme{grid-template-columns: 1fr 80px}
+.t-row.bareme .val{font-size:15px}
+ 
+.t-row.formule{grid-template-columns: 90px 1fr}
+.t-row.formule .lbl{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  color:var(--tmk-prune);
+  font-size:15px;
+  text-align:center;
+  background:#FBF7F9;
+  border-right:1px solid var(--border);
+}
+.t-row.formule .formula{
+  font-family:'JetBrains Mono', monospace;
+  font-size:13px;
+  text-align:left;
+  color:var(--text);
+}
+.t-row.formule.head{grid-template-columns: 90px 1fr}
+.t-row.formule.head .lbl{
+  background:transparent;
+  color:white;
+  border:none;
+}
+ 
+.callout{
+  background: linear-gradient(135deg, var(--bg-soft) 0%, #FFF8E1 100%);
+  border-radius:var(--radius);
+  padding:18px 24px;
+  border-left:4px solid var(--tmk-or);
+  margin: 18px 0 0;
+  font-size:13px;
+  color:var(--tmk-charbon);
+  line-height:1.6;
+}
+.callout strong{color:var(--tmk-prune-dark);font-weight:600}
+ 
+/* DECOTE */
+.decote-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.decote-grid{grid-template-columns:1fr}}
+.decote-card{
+  background:white;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px 22px;
+  position:relative;
+  overflow:hidden;
+}
+.decote-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:4px;
+  background: linear-gradient(90deg, var(--tmk-prune) 0%, var(--tmk-or) 100%);
+}
+.decote-label{
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--tmk-prune);font-weight:700;
+  margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.decote-title{
+  font-family:'Fraunces',serif;
+  font-size:16px;font-weight:600;color:var(--tmk-charbon);
+  margin-bottom:10px;
+}
+.decote-formula{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12.5px;
+  background:var(--bg-soft);
+  padding:10px 14px;
+  border-radius:6px;
+  color:var(--tmk-charbon);
+  line-height:1.6;
+}
+.decote-formula strong{color:var(--tmk-prune);font-weight:600}
+ 
+/* FOOTER */
+.fiche-footer{
+  padding: 24px 44px;background:var(--bg-soft);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+  font-size:11px;color:var(--text-muted);
+}
+.fiche-footer-brand{font-family:'Fraunces',serif;font-weight:600;color:var(--tmk-prune);font-size:13px}
+.last-update{display:inline-flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+.last-update::before{content:'';width:6px;height:6px;background:var(--tmk-or);border-radius:50%}
+ 
+.loader{display:flex;align-items:center;justify-content:center;padding:80px 20px;flex-direction:column;gap:16px}
+.loader-spinner{width:36px;height:36px;border:3px solid var(--bg-soft);border-top-color:var(--tmk-prune);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-size:13px;color:var(--text-muted)}
+.error-box{display:none;padding:80px 24px;text-align:center;color:var(--text-muted)}
+.error-box.show{display:block}
+.hidden{display:none !important}
+ 
+@media(max-width: 640px){
+  body{padding:12px 8px}
+  .fiche-header{padding:28px 24px 22px}
+  .fiche-title{font-size:24px}
+  .fiche-body{padding:24px 22px 32px}
+  .fiche-footer{padding:18px 22px;font-size:10px}
+  .t-row > div{padding:10px 12px;font-size:12px}
+  .t-row.head > div{padding:10px 12px}
+  .info-card{padding:16px 18px}
+  .info-card ul{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+ 
+<article class="fiche">
+ 
+  <header class="fiche-header">
+    <div class="fiche-header-content">
+      <div class="fiche-eyebrow">TMK Performances · Fiche mémo de synthèse</div>
+      <h1 class="fiche-title">Droit et environnement<br>fiscal du particulier</h1>
+      <p class="fiche-subtitle" id="subtitle">Synthèse complète : barème, parts fiscales, calcul, décote</p>
+      <div class="fiche-meta">
+        <span>📅 Année : <strong id="metaAnnee">—</strong></span>
+        <span>📊 Sur les revenus : <strong id="metaRevenus">—</strong></span>
+      </div>
+    </div>
+  </header>
+ 
+  <div class="fiche-body">
+ 
+    <div id="loader" class="loader">
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Chargement des données fiscales…</div>
+    </div>
+ 
+    <div id="errorBox" class="error-box">
+      Impossible de charger les données. Merci de contacter ton formateur.
+    </div>
+ 
+    <div id="content" class="hidden">
+ 
+      <!-- 1. RFR & Parts -->
+      <div class="grid-2">
+        <div class="info-card">
+          <div class="info-card-title">Revenu fiscal de référence</div>
+          <ul>
+            <li>Traitements et salaires <strong>− <span id="abattFP">10</span> %</strong> de frais professionnels (ou frais réels)</li>
+            <li>Bénéfices Industriels et Commerciaux</li>
+            <li>Bénéfices Non Commerciaux</li>
+            <li>Bénéfices Agricoles</li>
+            <li>Revenus fonciers, plus-values, etc.</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">Parts fiscales</div>
+          <ul>
+            <li><strong>1 part</strong> : célibataire, divorcé(e), veuf(ve) sans enfant, union libre</li>
+            <li><strong>2 parts</strong> : couples mariés, pacsés, veuf(ve) avec enfant à charge</li>
+            <li><strong>+ 0,5 part</strong> par enfant pour les 2 premiers</li>
+            <li><strong>+ 1 part</strong> par enfant à partir du 3ème</li>
+            <li><strong>+ 0,5 part</strong> : parent isolé / pers. ayant élevé seul un enfant ≥ 5 ans</li>
+            <li><strong>+ 0,5 part</strong> : personne handicapée</li>
+            <li><strong>Garde alternée</strong> : 0,25 part par enfant pour les 2 premiers</li>
+          </ul>
+        </div>
+      </div>
+ 
+      <!-- 2. BARÈME -->
+      <div class="section" style="margin-top:32px">
+        <div class="section-header">
+          <div class="section-num">1</div>
+          <div class="section-title" id="sectionBaremeTitle">Barème de l'IRPP</div>
+        </div>
+        <div class="table-wrap">
+          <div class="t-row head bareme">
+            <div>Quotient familial</div>
+            <div style="text-align:right">TMI</div>
+          </div>
+          <div id="baremeRows"></div>
+        </div>
+        <div class="callout">
+          <strong>Quotient familial</strong> = Revenu net imposable ÷ Nombre de parts. C'est lui qui détermine la tranche atteinte par le foyer.
+        </div>
+      </div>
+ 
+      <!-- 3. FORMULES -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">2</div>
+          <div class="section-title">Formules de calcul rapide</div>
+        </div>
+        <div class="table-wrap">
+          <div class="t-row head formule">
+            <div class="lbl">TMI</div>
+            <div>Formule</div>
+          </div>
+          <div id="formulesRows"></div>
+        </div>
+        <div class="callout">
+          <strong>R</strong> = Revenu net imposable du foyer · <strong>N</strong> = Nombre de parts du foyer. <br>
+          En cas de calcul tranche par tranche, penser à <strong>multiplier l'IR obtenu à partir du quotient familial par le nombre de parts</strong>.
+        </div>
+      </div>
+ 
+      <!-- 4. DECOTE -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">3</div>
+          <div class="section-title">Décote</div>
+        </div>
+        <div class="decote-grid">
+          <div class="decote-card">
+            <div class="decote-label">👤 Déclaration individuelle</div>
+            <div class="decote-title">Si IR brut &lt; <span id="seuilIndiv">—</span></div>
+            <div class="decote-formula">
+              Décote = <strong id="forfIndiv">—</strong> − <strong id="tauxIndiv">—</strong> × IR brut
+            </div>
+          </div>
+          <div class="decote-card">
+            <div class="decote-label">👫 Déclaration commune</div>
+            <div class="decote-title">Si IR brut &lt; <span id="seuilCouple">—</span></div>
+            <div class="decote-formula">
+              Décote = <strong id="forfCouple">—</strong> − <strong id="tauxCouple">—</strong> × IR brut
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- 5. PLAFOND QF -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">4</div>
+          <div class="section-title">Plafonnement du quotient familial</div>
+        </div>
+        <div class="table-wrap">
+          <div class="t-row head">
+            <div>Cas particulier</div>
+            <div style="text-align:right">Plafond</div>
+          </div>
+          <div id="plafondRows"></div>
+        </div>
+        <div class="callout">
+          Le plafonnement limite l'avantage fiscal procuré par les demi-parts supplémentaires. Il s'applique automatiquement quand l'avantage théorique dépasse ces seuils.
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <footer class="fiche-footer">
+    <span class="fiche-footer-brand">TMK Performances</span>
+    <span class="last-update">Mise à jour : <strong id="lastUpdate">—</strong></span>
+  </footer>
+ 
+</article>
+ 
+<script>
+const SUPABASE_URL = 'https://ibkvyjlglwufxvzxnysa.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_xUfZHSOHf4TnBRRyzU_qJA_TcXIMSKX';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+ 
+function fmtEur(n, dec=0) {
+  return n.toLocaleString('fr-FR', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + ' €';
+}
+function fmtEur2(n) { return fmtEur(n, 2); }
+ 
+function computeConstants(s1, s2, s3, s4) {
+  const cst11 = s1 * 0.11;
+  const impot_a_s2 = (s2 - s1) * 0.11;
+  const cst30 = s2 * 0.30 - impot_a_s2;
+  const impot_a_s3 = impot_a_s2 + (s3 - s2) * 0.30;
+  const cst41 = s3 * 0.41 - impot_a_s3;
+  const impot_a_s4 = impot_a_s3 + (s4 - s3) * 0.41;
+  const cst45 = s4 * 0.45 - impot_a_s4;
+  return { cst11, cst30, cst41, cst45 };
+}
+ 
+async function load() {
+  const loader = document.getElementById('loader');
+  const errorBox = document.getElementById('errorBox');
+  const content = document.getElementById('content');
+ 
+  const { data, error } = await db
+    .from('parametres_fiscaux')
+    .select('*')
+    .eq('is_active', true)
+    .single();
+ 
+  if (error || !data) {
+    loader.classList.add('hidden');
+    errorBox.classList.add('show');
+    return;
+  }
+ 
+  document.getElementById('metaAnnee').textContent = data.annee;
+  document.getElementById('metaRevenus').textContent = data.annee_revenus;
+  document.getElementById('subtitle').textContent = 
+    `Synthèse ${data.annee} sur les revenus ${data.annee_revenus}`;
+  document.getElementById('sectionBaremeTitle').textContent = 
+    `Barème ${data.annee} (revenus ${data.annee_revenus})`;
+  document.getElementById('abattFP').textContent = 
+    data.abattement_fp_taux.toLocaleString('fr-FR', {maximumFractionDigits:2});
+ 
+  if (data.updated_at) {
+    document.getElementById('lastUpdate').textContent = 
+      new Date(data.updated_at).toLocaleDateString('fr-FR');
+  }
+ 
+  // Barème
+  const tranches = [
+    { range: `Jusqu'à ${fmtEur(data.bareme_seuil_0)}`, tmi: '0 %' },
+    { range: `De ${fmtEur(data.bareme_seuil_0 + 1)} à ${fmtEur(data.bareme_seuil_11)}`, tmi: '11 %' },
+    { range: `De ${fmtEur(data.bareme_seuil_11 + 1)} à ${fmtEur(data.bareme_seuil_30)}`, tmi: '30 %' },
+    { range: `De ${fmtEur(data.bareme_seuil_30 + 1)} à ${fmtEur(data.bareme_seuil_41)}`, tmi: '41 %' },
+    { range: `À partir de ${fmtEur(data.bareme_seuil_41 + 1)}`, tmi: '45 %' },
+  ];
+  document.getElementById('baremeRows').innerHTML = tranches.map(t => `
+    <div class="t-row bareme">
+      <div class="lbl">${t.range}</div>
+      <div class="val">${t.tmi}</div>
+    </div>
+  `).join('');
+ 
+  // Formules
+  const c = computeConstants(data.bareme_seuil_0, data.bareme_seuil_11, data.bareme_seuil_30, data.bareme_seuil_41);
+  const formules = [
+    { tmi: '0 %', f: '<span style="color:var(--text-muted);font-style:italic;font-family:Inter">Pas d\'impôt</span>' },
+    { tmi: '11 %', f: `(R × 0,11) − (N × ${fmtEur2(c.cst11)})` },
+    { tmi: '30 %', f: `(R × 0,30) − (N × ${fmtEur2(c.cst30)})` },
+    { tmi: '41 %', f: `(R × 0,41) − (N × ${fmtEur2(c.cst41)})` },
+    { tmi: '45 %', f: `(R × 0,45) − (N × ${fmtEur2(c.cst45)})` },
+  ];
+  document.getElementById('formulesRows').innerHTML = formules.map(f => `
+    <div class="t-row formule">
+      <div class="lbl">${f.tmi}</div>
+      <div class="formula">${f.f}</div>
+    </div>
+  `).join('');
+ 
+  // Décote
+  const tauxStr = data.decote_taux.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' %';
+  document.getElementById('seuilIndiv').textContent = fmtEur(data.decote_seuil_indiv);
+  document.getElementById('forfIndiv').textContent = fmtEur(data.decote_forfait_indiv);
+  document.getElementById('tauxIndiv').textContent = tauxStr;
+  document.getElementById('seuilCouple').textContent = fmtEur(data.decote_seuil_couple);
+  document.getElementById('forfCouple').textContent = fmtEur(data.decote_forfait_couple);
+  document.getElementById('tauxCouple').textContent = tauxStr;
+ 
+  // Plafonds QF
+  const plafonds = [
+    { lbl: 'Cas général (par demi-part)', val: data.plafond_qf_demi },
+    { lbl: 'Quart de part (garde alternée)', val: data.plafond_qf_quart },
+    { lbl: 'Parent isolé (1ère part / 1er enfant)', val: data.plafond_qf_parent_isole },
+    { lbl: 'Pers. ayant élevé seul(e) un enfant ≥ 5 ans', val: data.plafond_qf_veuf },
+    { lbl: 'Anciens combattants / CMI invalidité', val: data.plafond_qf_invalidite },
+  ];
+  document.getElementById('plafondRows').innerHTML = plafonds.map(p => `
+    <div class="t-row">
+      <div class="lbl">${p.lbl}</div>
+      <div class="val">${fmtEur(p.val)}</div>
+    </div>
+  `).join('');
+ 
+  loader.classList.add('hidden');
+  content.classList.remove('hidden');
+}
+ 
+load();
+</script>
+ 
+</body>
+</html>
